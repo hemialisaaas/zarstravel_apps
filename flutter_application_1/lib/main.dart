@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'detail_screen.dart';  // Import the detail screen
+import 'home_page.dart';
+import 'popular_destinations.dart';  // Import the new file
+import 'testimonial_page.dart';  // Import the testimonial page file
+import 'sign_in_page.dart';
 
 void main() {
   runApp(const ZarsTravelApp());
@@ -29,303 +32,69 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 0;
+
+  static const List<Widget> _widgetOptions = <Widget>[
+    HomePage(),
+    PaketTravelPage(),
+    TestimonialPage(),  // Ensure this is correct
+    SignInPage(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Image.network('assets/logo.png', height: 50),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        actions: [
-          TextButton(
-            onPressed: () {},
-            child: const Text("Home", style: TextStyle(color: Colors.black)),
+      body: _widgetOptions.elementAt(_selectedIndex),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
           ),
-          TextButton(
-            onPressed: () {},
-            child: const Text("Paket Travel", style: TextStyle(color: Colors.black)),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.travel_explore),
+            label: 'Paket Travel',
           ),
-          TextButton(
-            onPressed: () {},
-            child: const Text("Testimonial", style: TextStyle(color: Colors.black)),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat),
+            label: 'Testimonial',
           ),
-          TextButton(
-            onPressed: () {},
-            child: const Text("Sign In", style: TextStyle(color: Colors.black)),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Sign In',
           ),
         ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                Image.network(
-                  'assets/header.jpg',
-                  width: double.infinity,
-                  height: 300,
-                  fit: BoxFit.cover,
-                ),
-                Container(
-                  width: double.infinity,
-                  height: 300,
-                  color: Colors.black.withOpacity(0.3),
-                ),
-                Positioned(
-                  bottom: 30,
-                  left: 20,
-                  right: 20,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Jelajahi Dunia bersama ZarsTravel',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'Pesan dan nikmati perjalanan yang menyenangkan',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
-                        ),
-                        child: const Text(
-                          'Get Started',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildInfoCard('20K', 'Members'),
-                  _buildInfoCard('12', 'Countries'),
-                  _buildInfoCard('3k', 'Hotels'),
-                  _buildInfoCard('72', 'Partners'),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Column(
-                children: [
-                  const Text(
-                    'Popular Destination',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    'Something that you never try before in this world',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        _buildDestinationCard(context, 'Indonesia', 'DERATAN, BALI', 'assets/popular-1.jpg'),
-                        _buildDestinationCard(context, 'Indonesia', 'BROMO, MALANG', 'assets/popular-2.jpg'),
-                        _buildDestinationCard(context, 'Indonesia', 'NUSA PENIDA', 'assets/popular-3.jpg'),
-                        _buildDestinationCard(context, 'Middle East', 'DUBAI', 'assets/popular-4.jpg'),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-                      Padding(
-           padding: const EdgeInsets.symmetric(vertical: 16.0),
-           child: Column(
-              children: [
-               const Text(
-                  'They are Loving Us',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 10),
-               const Text(
-                 'See what our customers are saying',
-                 style: TextStyle(
-                   fontSize: 16,
-                   color: Colors.grey,
-                 ),
-                ),
-                const SizedBox(height: 20),
-
-                Column(
-                 children: [
-                   _buildTestimonialCard('Angga Luthfafi', 'It was glorious and I am so happy of it!', 'Trip to Ubud', 'assets/testimonial-1.png'),
-                    const SizedBox(height: 20),
-                    _buildTestimonialCard('Fadhil Jaidi', 'The trip was amazing and I\'m so happy of it!', 'Trip to Nusa Penida', 'assets/testimonial-2.png'),
-                    const SizedBox(height: 20),
-                   _buildTestimonialCard('Dede Inoen', 'I loved it when I was shaking harder and harder!', 'Trip to Karimun Jawa', 'assets/testmonial-3.png'),
-                 ],
-               ),
-             ],
-            ),
-          ),
-            const Footer(),
-          ],
-        ),
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        unselectedItemColor: Colors.grey,
+        onTap: _onItemTapped,
       ),
     );
   }
+}
 
-  Widget _buildInfoCard(String value, String label) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(label),
-      ],
-    );
+class PaketTravelPage extends StatelessWidget {
+  const PaketTravelPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const PopularDestinationsPage();  // Use the new widget
   }
+}
 
-Widget _buildDestinationCard(BuildContext context, String country, String destination, String imageUrl) {
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Image.network(
-            imageUrl,
-            width: 150,
-            height: 250,
-            fit: BoxFit.cover,
-          ),
-          Container(
-            width: 150,
-            height: 250,
-            color: Colors.black.withOpacity(0.4),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  country,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12, // Mengubah ukuran font
-                  ),
-                ),
-                Text(
-                  destination,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14, // Mengubah ukuran font
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => DetailScreen(
-                        placeName: destination,
-                        duration: 5,
-                        imagePath: imageUrl,
-                        memberImages: const ['assets/member-1.png', 'assets/member-2.png', 'assets/member-3.png'],
-                        departureDate: 'January 1, 2024',
-                        tripType: 'Open Trip',
-                        price: 1200.00,
-                      )),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                  ),
-                  child: const Text('View Details'),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+class SignInPage extends StatelessWidget {
+  const SignInPage({super.key});
 
-
-  Widget _buildTestimonialCard(String name, String feedback, String trip, String imageUrl) {
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundImage: NetworkImage(imageUrl),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              name,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              feedback,
-              style: const TextStyle(
-                fontSize: 16,
-                fontStyle: FontStyle.italic,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              trip,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
-            ),
-          ],
-        ),
-      ),
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text('Sign In Page'),
     );
   }
 }

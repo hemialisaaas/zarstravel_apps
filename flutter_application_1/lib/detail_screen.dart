@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 class DetailScreen extends StatelessWidget {
   final String placeName;
+  final int duration;
   final String imagePath;
   final List<String> memberImages;
   final String departureDate;
-  final int duration;
   final String tripType;
   final double price;
 
   const DetailScreen({
     super.key,
     required this.placeName,
+    required this.duration,
     required this.imagePath,
     required this.memberImages,
     required this.departureDate,
-    required this.duration,
     required this.tripType,
     required this.price,
   });
@@ -25,71 +25,94 @@ class DetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(placeName),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
+        backgroundColor: Colors.blue,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              placeName,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Image.network(
+              imagePath,
+              width: double.infinity,
+              height: 300,
+              fit: BoxFit.cover,
             ),
-            const Text('Indonesia', style: TextStyle(fontSize: 18, color: Colors.grey)),
-            const SizedBox(height: 16),
-            Image.network(imagePath, errorBuilder: (context, error, stackTrace) {
-              return const Text('Unable to load image');
-            }),
-            const SizedBox(height: 16),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Members are going',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    ...memberImages.map((image) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 4.0),
-                        child: CircleAvatar(backgroundImage: NetworkImage(image)),
-                      );
-                    }),
-                    const Text('+9', style: TextStyle(fontSize: 20)),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Trip informations',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
-                Text('Date of departure: $departureDate'),
-                Text('Duration: $duration Days'),
-                Text('Type: $tripType'),
-                Text('Prices: Rp.${price.toStringAsFixed(2)} / org'),
-                const SizedBox(height: 16),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    placeName,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      for (var memberImage in memberImages)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: CircleAvatar(
+                            backgroundImage: AssetImage(memberImage),
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Trip Information',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  _buildInfoRow('Date of departure', departureDate),
+                  _buildInfoRow('Duration', '$duration days'),
+                  _buildInfoRow('Type', tripType),
+                  _buildInfoRow('Price', 'Rp $price / org'),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Add functionality to join the trip
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                    ),
                     child: const Text('Join Now'),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.grey,
+            ),
+          ),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }
